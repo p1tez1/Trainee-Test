@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Select a SCV file</h1>
+<div class="row">
+    <div class="col-md-5">
+        <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <p>Upload file</p>
+                    <input class="form-control" name="uploadedFile" type="file" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input class="btn btn-success" type="submit" value="Upload" />
+                </div>
+            </div>
+            <div class="form-group">
+
+                <div class="col-md-offset-3 col-md-10">
+                    <br />
+                    <span style="color:red;">
+                        @ViewBag.Message
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> 

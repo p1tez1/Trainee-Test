@@ -1,0 +1,196 @@
+﻿@model IEnumerable<DAL.Mode.Employee>
+
+@{
+    ViewBag.Title = "View";
+}
+<html>
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #myInput {
+            background-image: url('/css/searchicon.png');
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+            #myTable th, #myTable td {
+                text-align: left;
+                padding: 12px;
+            }
+
+            #myTable tr {
+                border-bottom: 1px solid #ddd;
+            }
+
+                #myTable tr.header, #myTable tr:hover {
+                    background-color: #f1f1f1;
+                }
+    </style>
+    <!-- Підключення Bootstrap для Glyphicons -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+    <h2>My Managers</h2>
+
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for all fields.." title="Type in a name">
+    <h2>View Managers</h2>
+
+    <!-- Sorting buttons -->
+    <button onclick="sortTable('name')">Sort by Name</button>
+    <button onclick="sortTable('dob')">Sort by Date of Birth</button>
+    <button onclick="sortTable('married')">Sort by Marital Status</button>
+    <button onclick="sortTable('salary')">Sort by Salary</button>
+
+    <table id="myTable" class="table" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Married)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salary)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Married)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Salary)
+                    </td>
+                    <td>
+                        <a asp-action="Edite" asp-controller="Home" asp-route-id="@item.Id">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-controller="Home" asp-route-id="@item.Id">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td, i, t;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 1; i < tr.length; i++) {
+                var filtered = false;
+                var tds = tr[i].getElementsByTagName("td");
+                for (t = 0; t < tds.length; t++) {
+                    var td = tds[t];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            filtered = true;
+                        }
+                    }
+                }
+                if (filtered === true) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+
+        function sortTable(column) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[getColumnIndex(column)];
+                    y = rows[i + 1].getElementsByTagName("TD")[getColumnIndex(column)];
+                    if (getColumnValue(x, column) > getColumnValue(y, column)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function getColumnIndex(column) {
+            switch (column) {
+                case 'name':
+                    return 1;
+                case 'dob':
+                    return 2;
+                case 'married':
+                    return 3;
+                case 'salary':
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+
+        function getColumnValue(td, column) {
+            if (column === 'dob') {
+                var dateParts = td.innerHTML.split(/[.\s:]/);
+                return new Date(dateParts[2], dateParts[1] - 1, dateParts[0]).getTime();
+            } else {
+                return td.innerHTML.toLowerCase();
+            }
+        }
+    </script>
+
+</body>
+</html>
