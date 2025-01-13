@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class EmployeeService : IEmployeeService
 {
-    private readonly MyDbContext _context;
+    public readonly MyDbContext _context;
 
     public EmployeeService(MyDbContext context)
     {

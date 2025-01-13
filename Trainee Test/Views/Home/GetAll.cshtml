@@ -167,6 +167,18 @@
             }
         }
 
+        function getColumnValue(td, column) {
+            if (column === 'dob') {
+                var dateParts = td.innerHTML.split(/[.\s:]/);
+                
+                return new Date(dateParts[2], dateParts[1] - 1, dateParts[0]).getTime();
+            } else if (column === 'salary') {
+                return parseFloat(td.innerHTML.replace(/[^0-9.-]/g, ''));
+            } else {
+                return td.innerHTML.toLowerCase();
+            }
+        }
+
         function getColumnIndex(column) {
             switch (column) {
                 case 'name':
@@ -182,14 +194,6 @@
             }
         }
 
-        function getColumnValue(td, column) {
-            if (column === 'dob') {
-                var dateParts = td.innerHTML.split(/[.\s:]/);
-                return new Date(dateParts[2], dateParts[1] - 1, dateParts[0]).getTime();
-            } else {
-                return td.innerHTML.toLowerCase();
-            }
-        }
     </script>
 
 </body>
